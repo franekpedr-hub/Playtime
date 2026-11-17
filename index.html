@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>PLAYTIME CO. — Employee Database Terminal</title>
+<style type="text/css">
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  background-color: #0d1013;
+  color: #d5d8d4;
+  font-family: "Courier New", Courier, monospace, Arial, sans-serif;
+  font-size: 13px;
+  -webkit-text-size-adjust: 100%;
+}
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+button, input {
+  font-family: "Courier New", Courier, monospace, Arial, sans-serif;
+  -webkit-appearance: none;
+  border-radius: 2px;
+}
+.clear {
+  clear: both;
+}
+.hidden {
+  display: none !important;
+}
+
+/* EKRAN LOGOWANIA - KOMPATYBILNY Z iOS 9 SAFARI (BEZ JEDNOSTEK VH) */
+#loginScreen {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+  padding: 28px 12px 50px 12px;
+  background-color: #0d1013;
+  background-image: -webkit-radial-gradient(center, ellipse cover, #232a2e 0%, #0e1215 65%, #07090a 100%);
+  background-image: radial-gradient(ellipse at center, #232a2e 0%, #0e1215 65%, #07090a 100%);
+}
+.loginBox {
+  width: 100%;
+  max-width: 440px;
+  margin: 26px auto 0 auto;
+  border: 2px solid #5c5e56;
+  background-color: #161b1e;
+  box-shadow: 0 0 0 4px #090b0d, 0 10px 30px #000000;
+  padding: 22px;
+}
+.logo {
+  text-align: center;
+  border-bottom: 1px solid #4d5149;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+.logoMark {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  color: #e2dcc6;
+}
+.logoSub {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #9da092;
+  margin-top: 6px;
+}
+.stamp {
+  display: inline-block;
+  border: 1px solid #a8322d;
+  background-color: #291110;
+  color: #f0655b;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-top: 10px;
+}
+.loginBox label {
+  display: block;
+  color: #b8b39a;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin: 14px 0 6px 0;
+}
+.loginBox input {
+  display: block;
+  width: 100%;
+  padding: 12px 10px;
+  background-color: #080b0d;
+  border: 1px solid #565e5d;
+  color: #f2f4f0;
+  font-size: 15px;
+  outline: none;
+}
+.loginBox input:focus {
+  border-color: #cfa959;
+  background-color: #0d1215;
+}
+.primaryBtn {
+  display: block;
+  width: 100%;
+  margin-top: 18px;
+  background-color: #992623;
+  border: 1px solid #c94c44;
+  color: #ffffff;
+  padding: 13px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-align: center;
+}
+.primaryBtn:active {
+  background-color: #6b1a18;
+}
+#loginError {
+  color: #ff776e;
+  min-height: 16px;
+  margin-top: 10px;
+  font-size: 11px;
+  font-weight: bold;
+}
+.loginFoot {
+  font-size: 10px;
+  color: #7b8380;
+  text-align: center;
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid #2e3435;
+  line-height: 1.5;
+}
+
+/* PORTAL GŁÓWNY */
+#portal {
+  display: none;
+  width: 100%;
+  min-height: 100%;
+  background-color: #0f1316;
+}
+.topbar {
+  background-color: #161c1f;
+  border-bottom: 2px solid #962926;
+  padding: 10px 14px;
+  overflow: hidden;
+}
+.topBrand {
+  float: left;
+}
+.topBrand strong {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 17px;
+  letter-spacing: 3px;
+  color: #e6e0cc;
+}
+.topBrand small {
+  display: block;
+  color: #939a93;
+  font-size: 9px;
+  letter-spacing: 2px;
+  margin-top: 3px;
+}
+.topRight {
+  float: right;
+  text-align: right;
+  color: #a3a9a0;
+  font-size: 10px;
+  line-height: 1.6;
+}
+.topRight b {
+  color: #dec37c;
+}
+.logoutBtn {
+  display: inline-block;
+  margin-top: 4px;
+  background-color: #361b1b;
+  border: 1px solid #8c3531;
+  color: #f0b2ad;
+  padding: 4px 9px;
+  font-size: 9px;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+.warningBar {
+  background-color: #541b1a;
+  color: #f5cbc5;
+  padding: 7px 14px;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #a83c36;
+}
+.layout {
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 12px;
+}
+.sidebar {
+  width: 215px;
+  float: left;
+  background-color: #161b1e;
+  border: 1px solid #3c4444;
+  padding: 10px;
+}
+.sideTitle {
+  color: #c2ad72;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  padding: 6px 6px 8px 6px;
+  border-bottom: 1px solid #3f4643;
+  margin-bottom: 8px;
+}
+.navBtn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background-color: #1f2629;
+  color: #c2c9c2;
+  border: 1px solid #333c3d;
+  padding: 11px 9px;
+  margin: 0 0 5px 0;
+  cursor: pointer;
+  font-size: 12px;
+}
+.navBtn:active, .navBtn.active {
+  background-color: #522321;
+  border-color: #b03d37;
+  color: #ffffff;
+  font-weight: bold;
+}
+.navBtn span {
+  color: #c4a35e;
+  margin-right: 6px;
+}
+.sideInfo {
+  border-top: 1px solid #3f4643;
+  margin-top: 12px;
+  padding: 10px 6px 2px 6px;
+  color: #848e88;
+  font-size: 10px;
+  line-height: 1.7;
+}
+.main {
+  margin-left: 228px;
+  min-height: 600px;
+}
+.pageHead {
+  background-color: #1a2124;
+  border: 1px solid #414b4a;
+  border-left: 4px solid #9e2d29;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.pageHead h1 {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  color: #e6dec8;
+  font-size: 19px;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+.pageHead p {
+  margin: 6px 0 0 0;
+  color: #97a19a;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.toolbar {
+  background-color: #141a1d;
+  border: 1px solid #394242;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+.toolbar input {
+  width: 100%;
+  max-width: 460px;
+  background-color: #080c0e;
+  border: 1px solid #4d5755;
+  padding: 10px;
+  color: #f0f2ee;
+  font-size: 13px;
+}
+.toolbarNote {
+  color: #808984;
+  font-size: 10px;
+  margin-top: 6px;
+}
+
+/* SIATKA KART (INLINE-BLOCK DLA PEŁNEJ ZGODNOŚCI Z iOS 9.3.6) */
+.grid {
+  width: 100%;
+  font-size: 0;
+}
+.record {
+  display: inline-block;
+  vertical-align: top;
+  width: 32%;
+  margin: 0 2% 12px 0;
+  background-color: #191f22;
+  border: 1px solid #424b4a;
+  padding: 13px;
+  min-height: 165px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.record.third {
+  margin-right: 0;
+}
+.record:active {
+  border-color: #d6b15c;
+  background-color: #222a2e;
+}
+.record h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: #e6ddc5;
+  margin: 0 0 8px 0;
+  font-weight: bold;
+}
+.record .meta {
+  color: #aeb6af;
+  line-height: 1.6;
+  font-size: 11px;
+}
+.tag {
+  display: inline-block;
+  padding: 3px 6px;
+  margin: 8px 4px 0 0;
+  border: 1px solid #59615c;
+  background-color: #121719;
+  color: #cbbd88;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+.tag.red {
+  border-color: #a63a34;
+  background-color: #291312;
+  color: #f58278;
+}
+.tag.green {
+  border-color: #497357;
+  background-color: #122117;
+  color: #92c99e;
+}
+.tag.grey {
+  color: #a1a8a2;
+}
+.empty {
+  border: 1px dashed #59615c;
+  padding: 25px;
+  text-align: center;
+  color: #9ca49d;
+  background-color: #14191c;
+}
+
+/* DASHBOARD I PANELE */
+.panel {
+  background-color: #191f22;
+  border: 1px solid #414948;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.panel h2 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  color: #decfa3;
+  letter-spacing: 1px;
+  margin: 0 0 10px 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #323b3b;
+}
+.stats {
+  width: 100%;
+  font-size: 0;
+}
+.stat {
+  display: inline-block;
+  vertical-align: top;
+  width: 23.5%;
+  margin-right: 2%;
+  background-color: #161c1f;
+  border: 1px solid #414948;
+  padding: 12px;
+}
+.stat.lastStat {
+  margin-right: 0;
+}
+.stat strong {
+  display: block;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  color: #dec680;
+  font-weight: bold;
+}
+.stat span {
+  display: block;
+  color: #929d96;
+  font-size: 9px;
+  letter-spacing: 1px;
+  margin-top: 5px;
+}
+.twoCol {
+  width: 100%;
+  font-size: 0;
+}
+.twoCol .panel {
+  display: inline-block;
+  vertical-align: top;
+  width: 49%;
+  margin-right: 2%;
+  font-size: 12px;
+}
+.twoCol .panel.secondCol {
+  margin-right: 0;
+}
+.line {
+  border-bottom: 1px solid #313a3a;
+  padding: 8px 0;
+  color: #b4bcb4;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.line:last-child {
+  border-bottom: none;
+}
+.line b {
+  color: #e3d9c1;
+}
+
+/* WIDOK SZCZEGÓŁOWY */
+.detail {
+  background-color: #161c1f;
+  border: 1px solid #96322e;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.detail h2 {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ebe0c3;
+  font-size: 20px;
+  margin: 0 0 6px 0;
+}
+.detail .sub {
+  color: #a8afa6;
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+.detailGrid {
+  width: 100%;
+  font-size: 0;
+  margin-top: 12px;
+}
+.detailCell {
+  display: inline-block;
+  vertical-align: top;
+  width: 50%;
+  padding: 9px 10px;
+  border-top: 1px solid #343d3d;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.detailCell b {
+  display: block;
+  color: #c2ad72;
+  font-size: 9px;
+  letter-spacing: 1px;
+  margin-bottom: 3px;
+}
+.detailText {
+  font-size: 12px;
+  line-height: 1.65;
+  color: #c5ccc3;
+  border-top: 1px solid #343d3d;
+  padding: 12px 4px;
+}
+.detailText b {
+  display: block;
+  color: #c2ad72;
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+.backBtn {
+  display: inline-block;
+  background-color: #2c3536;
+  color: #ebe4d1;
+  border: 1px solid #5c6660;
+  padding: 10px 14px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  font-size: 11px;
+  font-weight: bold;
+}
+.backBtn:active {
+  background-color: #3d494b;
+}
+.footer {
+  border-top: 1px solid #343c3c;
+  padding: 14px 4px;
+  color: #727c76;
+  font-size: 9px;
+  line-height: 1.6;
+  margin-top: 16px;
+}
+
+/* RESPONSYWNOŚĆ DLA iPAD MINI 4 ORAZ iPHONE */
+@media screen and (max-width: 820px) {
+  .layout {
+    padding: 8px;
+  }
+  .sidebar {
+    float: none;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .navBtn {
+    display: inline-block;
+    width: auto;
+    margin: 3px 4px 3px 0;
+    padding: 9px 10px;
+    font-size: 11px;
+  }
+  .sideTitle, .sideInfo {
+    display: none;
+  }
+  .main {
+    margin-left: 0;
+  }
+  .record, .record.third {
+    width: 48.5%;
+    margin-right: 3%;
+  }
+  .record.even {
+    margin-right: 0;
+  }
+  .stat, .stat.lastStat {
+    width: 48.5%;
+    margin: 0 3% 8px 0;
+  }
+  .stat.evenStat {
+    margin-right: 0;
+  }
+  .twoCol .panel, .twoCol .panel.secondCol {
+    width: 100%;
+    margin-right: 0;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .record, .record.third, .record.even {
+    width: 100%;
+    margin-right: 0;
+  }
+  .detailCell {
+    width: 100%;
+  }
+  .topBrand {
+    float: none;
+    margin-bottom: 6px;
+  }
+  .topRight {
+    float: none;
+    text-align: left;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- EKRAN LOGOWANIA -->
+<div id="loginScreen">
+  <div class="loginBox">
+    <div class="logo">
+      <div class="logoMark">PLAYTIME CO.</div>
+      <div class="logoSub">EMPLOYEE &amp; RESEARCH DATABASE TERMINAL</div>
+      <div class="stamp">INTERNAL NETWORK // RESTRICTED ACCESS</div>
+    </div>
+
+    <div style="color:#adb3a9;font-size:11px;line-height:1.5;">
+      Autoryzacja terminala wewnętrznego Playtime Co. Wprowadź dowolne znaki w polach Employee ID oraz Password, aby uzyskać dostęp do kartoteki.
+    </div>
+
+    <form id="loginForm" action="javascript:void(0);">
+      <label for="employeeId">EMPLOYEE ID</label>
+      <input id="employeeId" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Wprowadź Employee ID">
+
+      <label for="password">PASSWORD</label>
+      <input id="password" type="password" autocomplete="off" placeholder="Wprowadź Password">
+
+      <div id="loginError"></div>
+
+      <button id="submitBtn" class="primaryBtn" type="submit">AUTHORIZE ACCESS</button>
+    </form>
+
+    <div class="loginFoot">
+      PLAYTIME CO. — PERSONNEL &amp; SPECIAL PROJECTS DIVISION<br>
+      NODE: PT-MAINFRAME-09 // LEGACY SAFARI COMPATIBLE<br>
+      OFFLINE SIMULATION BUILD — ANY NON-EMPTY CREDENTIALS ACCEPTED
+    </div>
+  </div>
+</div>
+
+<!-- GŁÓWNY PORTAL -->
+<div id="portal">
+  <div class="topbar">
+    <div class="topBrand">
+      <strong>PLAYTIME CO.</strong>
+      <small>EMPLOYEE &amp; EXPERIMENT RECORDS TERMINAL</small>
+    </div>
+    <div class="topRight">
+      LOGGED OPERATOR: <b id="sessionUser">GUEST</b><br>
+      NETWORK: <b>INTERNAL LOCAL ARCHIVE</b><br>
+      <button id="logoutBtn" class="logoutBtn" type="button">LOGOUT / END SESSION</button>
+    </div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="warningBar">
+    ! INTERNAL USE ONLY — CANON RECORDS VERIFIED AGAINST POPPY PLAYTIME LORE — UNCONFIRMED DATA FLAGGED !
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sideTitle">MAIN DIRECTORY</div>
+      <button class="navBtn active" data-page="Dashboard" type="button"><span>01</span> Dashboard</button>
+      <button class="navBtn" data-page="Employee Files" type="button"><span>02</span> Employee Files</button>
+      <button class="navBtn" data-page="Experiments" type="button"><span>03</span> Experiments</button>
+      <button class="navBtn" data-page="Objects" type="button"><span>04</span> Objects</button>
+      <button class="navBtn" data-page="Incident Reports" type="button"><span>05</span> Incident Reports</button>
+      <button class="navBtn" data-page="Restricted Archives" type="button"><span>06</span> Restricted Archives</button>
+      <button class="navBtn" data-page="Security Clearance" type="button"><span>07</span> Security Clearance</button>
+      <div class="sideInfo">
+        FACILITY: PLAYTIME CO.<br>
+        DIVISION: INTERNAL RECORDS<br>
+        SYSTEM: TERMINAL v9.3.6<br>
+        MODE: OFFLINE ARCHIVE<br>
+        STATUS: CONNECTED
+      </div>
+    </div>
+
+    <div class="main">
+      <div id="content"></div>
+      <div class="footer">
+        PLAYTIME CO. INTERNAL RECORDS TERMINAL &bull; ARCHIVE COPY &bull; THIS FAN DATABASE IS NOT AN OFFICIAL MOB ENTERTAINMENT PRODUCT.<br>
+        Wszystkie oficjalne postacie oraz potwierdzone numery eksperymentów (1006, 1160, 1163, 1166, 1170, 1188, 1199, 1222, 1322, 1468) pochodzą z kanonu Poppy Playtime; brakujące numery oznaczono jako NIEPOTWIERDZONE.
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+
+<script type="text/javascript">
+(function() {
+  var currentPage = 'Dashboard';
+
+  var employees = [
+    {
+      id: 'EMP-0001',
+      name: 'Elliot Ludwig',
+      role: 'Founder / Executive Director',
+      access: 'LEVEL 5 — EXECUTIVE',
+      sector: 'Executive Offices',
+      status: 'CANON CHARACTER',
+      canon: 'Założyciel Playtime Co. Postać kanoniczna. Szczegółowe dane kadrowe spoza głównej fabuły nie są tu dopowiadane.',
+      history: 'Założyciel i wieloletni dyrektor Playtime Co., twórca wizji fabryki zabawek oraz programu adopcyjnego Playcare.',
+      experiments: 'Poppy — bezpośredni związek fabularny z projektem lalki; szczegóły procedury nie są ujawnione.',
+      objects: 'Poppy Doll, dokumentacja założycielska Playtime Co.',
+      reports: 'Karta archiwalna. Brak pełnych akt personalnych po jego zniknięciu / śmierci.'
+    },
+    {
+      id: 'EMP-0002',
+      name: 'Harley Sawyer',
+      role: 'Head of Special Projects (The Doctor)',
+      access: 'LEVEL 5 — SPECIAL PROJECTS',
+      sector: 'Special Projects / The Shelf',
+      status: 'CANON CHARACTER',
+      canon: 'Postać kanoniczna (znany jako The Doctor w Chapter 4). Główny architekt programu Bigger Bodies Initiative.',
+      history: 'Zrekrutowany przez Leith Pierre’a do działu Special Projects. Po incydencie przeniesiony do systemu podtrzymywania życia w głębokich sektorach fabryki.',
+      experiments: 'Bigger Bodies Initiative; szczególny nadzór nad Experiment 1006 (The Prototype), 1160 (Boxy Boo), 1166 (Yarnaby) oraz 1322 (Doey).',
+      objects: 'The Doctor Life Support System, terminale badawcze Special Projects.',
+      reports: 'Ocena kierownictwa: wybitny intelekt, skrajny brak empatii, traktowanie obiektów badawczych wyłącznie jako zasobów.'
+    },
+    {
+      id: 'EMP-0003',
+      name: 'Leith Pierre',
+      role: 'Head of Innovation / Management',
+      access: 'LEVEL 4 — MANAGEMENT',
+      sector: 'Administration & Security',
+      status: 'CANON CHARACTER',
+      canon: 'Postać kanoniczna znana z kaset VHS oraz dokumentów rekrutacyjnych.',
+      history: 'Kluczowy menedżer odpowiedzialny za bezpieczeństwo informacji, rekrutację Harley’a Sawyera oraz nadzór nad tajemnicami fabryki.',
+      experiments: 'Nadzór administracyjny nad Special Projects i zabezpieczeniem obiektów.',
+      objects: 'Taśmy ostrzegawcze VHS, dokumentacja rekrutacyjna.',
+      reports: 'Znany z bezwzględnego egzekwowania klauzul poufności wobec personelu.'
+    },
+    {
+      id: 'EMP-0004',
+      name: 'Gracie Green (Ms. Gracie)',
+      role: 'Chief Wellness & Integration Advisor',
+      access: 'LEVEL 4 — INTEGRATION & R&D',
+      sector: 'Integration Department / Laboratories',
+      status: 'CANON CHARACTER',
+      canon: 'Postać kanoniczna z oficjalnych materiałów ARG oraz Chapter 5: Broken Things (powiązana z Experiment 1468 / Lily Lovebraids).',
+      history: 'Pełniła funkcję doradczyni ds. dobrostanu i integracji personelu w Playtime Co. Po serii wydarzeń w fabryce stała się podmiotem Experiment 1468 (Lily Lovebraids).',
+      experiments: 'Experiment 1468 (Lily Lovebraids) — bezpośrednie powiązanie fabularne w Chapter 5.',
+      objects: 'Dokumentacja działu Wellness & Integration, materiały ARG Playtime Co.',
+      reports: 'Akta potwierdzają jej oficjalną rolę w strukturach Playtime Co. przed transformacją w Experiment 1468.'
+    },
+    {
+      id: 'EMP-0005',
+      name: 'Stella Greyber',
+      role: 'Head of Playcare / Game Station Manager',
+      access: 'LEVEL 4 — MANAGEMENT',
+      sector: 'Playcare & Game Station',
+      status: 'CANON CHARACTER',
+      canon: 'Postać kanoniczna znana z nagrań rekrutacyjnych oraz materiałów dotyczących sierocińca Playcare.',
+      history: 'Kierowniczka sektora Playcare odpowiedzialna za opiekę nad dziećmi oraz współpracę z kierownictwem fabryki.',
+      experiments: 'Pośredni związek z podmiotami wywodzącymi się z Playcare (m.in. Theodore Grambell, Marie Payne, Quinn Navidson).',
+      objects: 'Taśma z rozmowy kwalifikacyjnej, dokumentacja Playcare.',
+      reports: 'W nagraniach wyrażała silne przywiązanie do idei pomagania dzieciom.'
+    },
+    {
+      id: 'EMP-0006',
+      name: 'Eddie M. N. Ritterman',
+      role: 'Head of Research',
+      access: 'LEVEL 4 — RESEARCH',
+      sector: 'Research & Development',
+      status: 'CANON CHARACTER',
+      canon: 'Postać kanoniczna wymieniana w dokumentach i korespondencji Playtime Co.',
+      history: 'Wysoko postawiony pracownik działu badań zaangażowany w procesy produkcyjne i projektowe firmy.',
+      experiments: 'Współpraca przy wczesnych etapach rozwoju projektów fabrycznych.',
+      objects: 'Dokumentacja badawcza Playtime Co.',
+      reports: 'Szczegółowy zakres obowiązków poza dokumentami z gry pozostaje nieujawniony.'
+    },
+    {
+      id: 'EMP-0007',
+      name: 'Matteo Lata',
+      role: 'Game Station Test Proctor',
+      access: 'LEVEL 3 — SUPERVISOR',
+      sector: 'Game Station',
+      status: 'CANON CHARACTER',
+      canon: 'Postać występująca w materiałach powiązanych z testami dzieci w Game Station / ARG.',
+      history: 'Pracownik nadzorujący przebieg testów sprawnościowych i poznawczych kandydatów w sektorze Game Station.',
+      experiments: 'Ocena kandydatów do programu Bigger Bodies (bez przypisywania niepotwierdzonych numerów).',
+      objects: 'Arkusze wyników Game Station.',
+      reports: 'Dokumentacja ograniczona do zapisów z testów i obserwacji kandydatów.'
+    },
+    {
+      id: 'EMP-0008',
+      name: 'Carmine McKabe',
+      role: 'Special Projects Research Staff',
+      access: 'LEVEL 3 — RESEARCH',
+      sector: 'Special Projects / Containment',
+      status: 'CANON CHARACTER',
+      canon: 'Nazwisko potwierdzone w dokumentacji związanej z eksperymentem Yarnaby (Chapter 4).',
+      history: 'Członek zespołu badawczego biorący udział w obserwacji oraz dokumentowaniu zachowania obiektu 1166.',
+      experiments: 'Experiment 1166 (Yarnaby) — ocena kondycji i zależności od Harley’a Sawyera.',
+      objects: 'Prisoner Profile 1166.',
+      reports: 'Brak szerszych danych biograficznych w oficjalnych materiałach.'
+    }
+  ];
+
+  var experiments = [
+    {
+      id: 'EXP-1006',
+      number: '1006',
+      name: 'The Prototype',
+      sector: 'Special Projects / Nieznany',
+      status: 'AKTYWNY / GŁÓWNY ANTAGONISTA',
+      danger: 'CRITICAL',
+      access: 'LEVEL 5',
+      canon: 'KANON — NUMER 1006 POTWIERDZONY',
+      history: 'Eksperyment 1006 był przełomową próbą przeniesienia ludzkiej świadomości do konstrukcji zabawki. Wykazał nadzwyczajną inteligencję oraz zdolność naśladowania głosów.',
+      goal: 'Wczesna weryfikacja możliwości transferu świadomości. Późniejsze cele samego Prototype obejmują przejęcie kontroli nad fabryką i eliminację personelu.',
+      workers: 'Harley Sawyer (badania i obserwacja); Elliot Ludwig (kontekst powstania firmy).',
+      objects: 'Mechaniczne ramię Prototype, nieznane komponenty konstrukcyjne.',
+      reports: 'Główny inicjator wydarzenia The Hour of Joy. Przejmuje szczątki innych eksperymentów (m.in. Mommy Long Legs, CatNap).'
+    },
+    {
+      id: 'EXP-1160',
+      number: '1160',
+      name: 'Boxy Boo',
+      sector: 'Bigger Bodies Initiative',
+      status: 'NIEZNANY / STATUS FABULARNY',
+      danger: 'HIGH',
+      access: 'LEVEL 4',
+      canon: 'KANON — NUMER 1160 POTWIERDZONY',
+      history: 'Pierwszy udany eksperyment w ramach programu Bigger Bodies Initiative według dokumentów z Chapter 4 ARG. Powstał po nieudanych próbach 1015 oraz 1026.',
+      goal: 'Wykorzystanie w zadaniach specjalnych i eliminacji niewygodnych pracowników na terenie fabryki.',
+      workers: 'Harley Sawyer (nadzór nad programem Bigger Bodies).',
+      objects: 'Zabawka Boxy Boo (wersja Bigger Body).',
+      reports: 'Potwierdzony w materiałach Project: Playtime oraz dokumentacji ARG.'
+    },
+    {
+      id: 'EXP-1163',
+      number: '1163',
+      name: 'Pianosaurus',
+      sector: 'Special Projects / Game Station',
+      status: 'MARTWY (CHAPTER 4)',
+      danger: 'MODERATE',
+      access: 'LEVEL 3',
+      canon: 'KANON — NUMER 1163 POTWIERDZONY',
+      history: 'Eksperyment oparty na zabawce muzycznego dinozaura Pianosaurus, występujący w Chapter 4: Safe Haven.',
+      goal: 'Niepotwierdzony szczegółowo w dostępnych raportach.',
+      workers: 'Personel Special Projects (nieustalony z nazwiska).',
+      objects: 'Zabawka Pianosaurus.',
+      reports: 'W Chapter 4 zostaje szybko wyeliminowany przez Doey the Doughman (Experiment 1322).'
+    },
+    {
+      id: 'EXP-1166',
+      number: '1166',
+      name: 'Yarnaby (Quinn Navidson)',
+      sector: 'The Shelf / Containment Zone',
+      status: 'MARTWY (CHAPTER 4)',
+      danger: 'HIGH',
+      access: 'LEVEL 4',
+      canon: 'KANON — NUMER 1166 POTWIERDZONY',
+      history: 'Bigger Body utworzony z sieroty Quinna Navidsona. Harley Sawyer celowo izolował go od innych i uzależniał emocjonalnie wyłącznie od siebie.',
+      goal: 'Służba jako wierny, agresywny strażnik posłuszny wyłącznie rozkazom The Doctora.',
+      workers: 'Harley Sawyer, Carmine McKabe.',
+      objects: 'Zabawka Yarnaby, dokument Prisoner Profile 1166.',
+      reports: 'Zginął podczas pościgu w sektorze No Man’s Land w Chapter 4: Safe Haven.'
+    },
+    {
+      id: 'EXP-1170',
+      number: '1170',
+      name: 'Huggy Wuggy',
+      sector: 'Lobby / Systemy Bezpieczeństwa Fabryki',
+      status: 'AKTYWNY / RANNY (POWRÓT W CHAPTER 4)',
+      danger: 'CRITICAL',
+      access: 'LEVEL 4',
+      canon: 'KANON — NUMER 1170 POTWIERDZONY',
+      history: 'Bigger Body oparty na najpopularniejszej maskotce Playtime Co. Charakteryzował się wysoką posłusznością wobec poleceń ochrony przy jednoczesnej zabójczej sile.',
+      goal: 'Maskotka obiektu oraz element systemu bezpieczeństwa i kontroli ruchu w fabryce.',
+      workers: 'Zespół Bigger Bodies Initiative.',
+      objects: 'Zabawka Huggy Wuggy, systemy monitoringu fabryki.',
+      reports: 'Uczestniczył w The Hour of Joy. W Chapter 1 spada w szyb wentylacyjny, lecz pojawia się ponownie na końcu Chapter 4.'
+    },
+    {
+      id: 'EXP-1188',
+      number: '1188',
+      name: 'CatNap (Theodore Grambell)',
+      sector: 'Playcare',
+      status: 'MARTWY (CHAPTER 3)',
+      danger: 'CRITICAL',
+      access: 'LEVEL 4',
+      canon: 'KANON — NUMER 1188 POTWIERDZONY',
+      history: 'Powstał z chłopca Theodore’a Grambella po wypadku podczas próby ucieczki, z której uratował go The Prototype. Po przemianie traktował 1006 jak bóstwo.',
+      goal: 'Utrzymywanie dyscypliny w Playcare przy użyciu halucynogennego Czerwonego Dymu (Red Smoke).',
+      workers: 'Harley Sawyer, personel Playcare.',
+      objects: 'Zabawka CatNap, instalacja Red Smoke w Playcare.',
+      reports: 'W Chapter 3: Deep Sleep zostaje porażony prądem i zabity przez The Prototype.'
+    },
+    {
+      id: 'EXP-1199',
+      number: '1199',
+      name: 'Bron (Thomas Clarke)',
+      sector: 'Produkcja / Magazyny',
+      status: 'NIEZNANY',
+      danger: 'MODERATE',
+      access: 'LEVEL 3',
+      canon: 'KANON — NUMER 1199 POTWIERDZONY',
+      history: 'Eksperyment utworzony z dorosłego pracownika Playtime Co., Thomasa Clarke’a, cierpiącego na śmiertelną chorobę.',
+      goal: 'Testowanie zachowania dorosłego podmiotu przeniesionego do ciała zabawki.',
+      workers: 'Zespół badawczy Playtime Co.',
+      objects: 'Zabawka dinozaura Brona.',
+      reports: 'Odrzucony i zaatakowany przez inne eksperymenty w sektorze testowym z powodu braku wspólnego pochodzenia z dziećmi.'
+    },
+    {
+      id: 'EXP-1222',
+      number: '1222',
+      name: 'Mommy Long Legs (Marie Payne)',
+      sector: 'Game Station',
+      status: 'MARTWA (CHAPTER 2)',
+      danger: 'CRITICAL',
+      access: 'LEVEL 4',
+      canon: 'KANON — NUMER 1222 POTWIERDZONY',
+      history: 'Bigger Body utworzony z dziewczynki Marie Payne. Wykazywała opiekuńczość wobec dzieci, lecz skrajną wrogość wobec dorosłych pracowników.',
+      goal: 'Prowadzenie i nadzorowanie prób sprawnościowych w Game Station.',
+      workers: 'Personel Game Station oraz Special Projects.',
+      objects: 'Zabawka Mommy Long Legs, aparatura Game Station.',
+      reports: 'Zginęła w kruszarce przemysłowej w Chapter 2, a jej ciało zostało zabrane przez The Prototype.'
+    },
+    {
+      id: 'EXP-1322',
+      number: '1322',
+      name: 'Doey the Doughman (Kevin, Jack, Matthew)',
+      sector: 'Safe Haven (Chapter 4)',
+      status: 'MARTWY (CHAPTER 4)',
+      danger: 'CRITICAL',
+      access: 'LEVEL 4',
+      canon: 'KANON — NUMER 1322 POTWIERDZONY',
+      history: 'Niezwykły eksperyment o plastycznej strukturze powstały z połączenia świadomości trzech chłopców (Kevin Barnes, Jack Ayers, Matthew Hallard).',
+      goal: 'Ochrona ocalałych zabawek w podziemnym schronieniu Safe Haven.',
+      workers: 'Harley Sawyer (proces tworzenia).',
+      objects: 'Zabawka Doey the Doughman, infrastruktura Safe Haven.',
+      reports: 'Po zniszczeniu Safe Haven wpada w furię i ginie w starciu z graczem w Chapter 4.'
+    },
+    {
+      id: 'EXP-1468',
+      number: '1468',
+      name: 'Lily Lovebraids (Gracie Green)',
+      sector: 'Integration Department / Laboratories (Chapter 5)',
+      status: 'AKTYWNA / ZAGROŻENIE (CHAPTER 5)',
+      danger: 'CRITICAL',
+      access: 'LEVEL 5',
+      canon: 'KANON — NUMER 1468 POTWIERDZONY (CHAPTER 5)',
+      history: 'Eksperyment powiązany z pracownicą Playtime Co. Gracie Green (Ms. Gracie), główną doradczynią ds. wellness i integracji.',
+      goal: 'Kontrola i manipulacja w głębokich laboratoriach integracyjnych fabryki.',
+      workers: 'Gracie Green (podmiot), personel Special Projects.',
+      objects: 'Zabawka Lily Lovebraids, akta Integration Department.',
+      reports: 'Główna postać związana z wydarzeniami Chapter 5: Broken Things.'
+    },
+    {
+      id: 'EXP-UNCONF-POPPY',
+      number: 'NUMER NIEPOTWIERDZONY',
+      name: 'Poppy',
+      sector: 'Executive / Restricted',
+      status: 'AKTYWNA',
+      danger: 'LOW / STRATEGIC',
+      access: 'LEVEL 5',
+      canon: 'POSTAĆ KANONICZNA — NUMER EKSPERYMENTU NIEPOTWIERDZONY',
+      history: 'Pierwsza inteligentna lalka stworzona w Playtime Co., ściśle powiązana z Elliotem Ludwigiem. Przez lata zamknięta w gablocie.',
+      goal: 'Nieznany pierwotny cel produkcyjny; dąży do powstrzymania The Prototype.',
+      workers: 'Elliot Ludwig.',
+      objects: 'Gablota Poppy, lalka Poppy.',
+      reports: 'Oficjalny numer eksperymentu nie został jednoznacznie potwierdzony w grze — nie wpisano zmyślonego numeru.'
+    },
+    {
+      id: 'EXP-UNCONF-KISSY',
+      number: 'NUMER NIEPOTWIERDZONY',
+      name: 'Kissy Missy',
+      sector: 'Fabryka / Różne sektory',
+      status: 'AKTYWNA / RANNA (CHAPTER 4 & 5)',
+      danger: 'MODERATE',
+      access: 'LEVEL 3',
+      canon: 'POSTAĆ KANONICZNA — NUMER NIEPOTWIERDZONY',
+      history: 'Żeński odpowiednik z linii Huggy Wuggy w wersji Bigger Body. W przeciwieństwie do większości obiektów pomaga głównemu bohaterowi oraz Poppy.',
+      goal: 'Niepotwierdzony w dokumentach.',
+      workers: 'Nieustaleni.',
+      objects: 'Zabawka Kissy Missy.',
+      reports: 'Brak potwierdzonego numeru serii w dostępnej dokumentacji.'
+    },
+    {
+      id: 'EXP-UNCONF-BUNZO',
+      number: 'NUMER NIEPOTWIERDZONY',
+      name: 'Bunzo Bunny',
+      sector: 'Game Station (Musical Memory)',
+      status: 'MARTWY (CHAPTER 2)',
+      danger: 'HIGH',
+      access: 'LEVEL 2',
+      canon: 'POSTAĆ KANONICZNA — NUMER NIEPOTWIERDZONY',
+      history: 'Obiekt przypisany do gry Musical Memory w Game Station.',
+      goal: 'Egzekwowanie zasad testu pamięciowego w Game Station.',
+      workers: 'Personel Game Station.',
+      objects: 'Talerze perkusyjne Bunzo, mechanizm opuszczania.',
+      reports: 'Wyeliminowany przez Mommy Long Legs po nieudanym teście w Chapter 2.'
+    },
+    {
+      id: 'EXP-UNCONF-PJ',
+      number: 'NUMER NIEPOTWIERDZONY',
+      name: 'PJ Pug-a-Pillar',
+      sector: 'Game Station (Statues)',
+      status: 'NIEZNANY',
+      danger: 'HIGH',
+      access: 'LEVEL 2',
+      canon: 'POSTAĆ KANONICZNA — NUMER NIEPOTWIERDZONY',
+      history: 'Obiekt wykorzystywany podczas próby Statues w Game Station.',
+      goal: 'Pościg za uczestnikami testu poruszającymi się przy włączonym świetle.',
+      workers: 'Personel Game Station.',
+      objects: 'Arena Statues.',
+      reports: 'Numer eksperymentu pozostaje niepotwierdzony.'
+    },
+    {
+      id: 'EXP-UNCONF-DOGDAY',
+      number: 'NUMER NIEPOTWIERDZONY',
+      name: 'DogDay',
+      sector: 'Playcare (Playhouse)',
+      status: 'MARTWY (CHAPTER 3)',
+      danger: 'LOW / HOSTILE WHEN CONTROLLED',
+      access: 'LEVEL 3',
+      canon: 'POSTAĆ KANONICZNA — NUMER NIEPOTWIERDZONY',
+      history: 'Lider grupy Smiling Critters w wersji Bigger Body. Uwięziony i okaleczony przez CatNapa za sprzeciw wobec kultu The Prototype.',
+      goal: 'Maskotka i opiekun w sektorze Playcare.',
+      workers: 'Personel Playcare.',
+      objects: 'Zabawka DogDay.',
+      reports: 'Zginął w Chapter 3 po opanowaniu jego ciała przez mniejsze zabawki Ruined Critters.'
+    },
+    {
+      id: 'EXP-STAFF-HARLEY',
+      number: 'NIE DOTYCZY (PERSONEL)',
+      name: 'Harley Sawyer — The Doctor',
+      sector: 'Special Projects / The Shelf',
+      status: 'MARTWY (CHAPTER 4)',
+      danger: 'CRITICAL',
+      access: 'LEVEL 5',
+      canon: 'POSTAĆ KANONICZNA — PRACOWNIK, NIE EKSPERYMENT BBI',
+      history: 'Naukowiec Playtime Co., którego mózg i organy zostały podłączone do głównego systemu komputerowego po usunięciu ze stanowiska.',
+      goal: 'Kontrola nad siecią terminali i eksperymentami w głębokich poziomach fabryki.',
+      workers: 'Leith Pierre (rekrutacja).',
+      objects: 'System podtrzymywania życia, sieć monitorów The Doctor.',
+      reports: 'Zneutralizowany przez gracza po odłączeniu kluczowych rdzeni systemu w Chapter 4.'
+    }
+  ];
+
+  var objects = [
+    { id: 'OBJ-001', name: 'Poppy Doll', type: 'Porcelanowa Lalka / Obiekt Kluczowy', sector: 'Executive / Restricted', status: 'RESTRICTED', notes: 'Lalka Poppy stworzona przez Elliota Ludwiga. Posiada ludzką świadomość; brak potwierdzonego numeru eksperymentu.' },
+    { id: 'OBJ-002', name: 'GrabPack (v1 / v2)', type: 'Wyposażenie Pracownicze', sector: 'Cała fabryka', status: 'DOCUMENTED', notes: 'Plecak z wysuwanymi dłońmi służący pracownikom do przenoszenia ciężkich przedmiotów i przewodzenia prądu bez ryzyka porażenia.' },
+    { id: 'OBJ-003', name: 'Red Smoke (Czerwony Dym)', type: 'Gaz Halucynogenny / Usypiający', sector: 'Playcare', status: 'RESTRICTED', notes: 'Substancja rozprowadzana w Playcare oraz wytwarzana przez Experiment 1188 (CatNap). Wywołuje sen i silne koszmary.' },
+    { id: 'OBJ-004', name: 'Prisoner Profile 1166', type: 'Dokumentacja Badawcza', sector: 'Special Projects', status: 'RESTRICTED', notes: 'Akta dotyczące Quinna Navidsona (Yarnaby) oraz metod psychologicznej izolacji stosowanych przez Harley’a Sawyera.' },
+    { id: 'OBJ-005', name: 'The Doctor Life Support System', type: 'Infrastruktura Medyczno-Komputerowa', sector: 'The Shelf', status: 'RESTRICTED', notes: 'Aparatura podtrzymująca funkcje życiowe Harley’a Sawyera i łącząca go z siecią fabryki.' },
+    { id: 'OBJ-006', name: 'Game Station Control Terminals', type: 'Aparatura Testowa', sector: 'Game Station', status: 'DOCUMENTED', notes: 'Konsole sterujące próbami Musical Memory, Wack-a-Wuggy oraz Statues.' },
+    { id: 'OBJ-007', name: 'VHS Training & Security Tapes', type: 'Nośniki Archiwalne', sector: 'Różne sektory', status: 'DOCUMENTED', notes: 'Kasety instruktażowe dla personelu oraz nagrania z monitoringu, w tym ostrzeżenia Leith Pierre’a.' },
+    { id: 'OBJ-008', name: 'Omni-Hand / Security Keycards', type: 'System Kontroli Dostępu', sector: 'Special Projects', status: 'RESTRICTED', notes: 'Karty oraz moduły autoryzacji wymagane do otwierania śluz wysokiego poziomu bezpieczeństwa.' }
+  ];
+
+  var incidents = [
+    { id: 'IR-001', title: 'The Hour of Joy (Godzina Radości)', date: '8 sierpnia 1995', sector: 'Cała fabryka Playtime Co.', severity: 'CRITICAL', status: 'CANON EVENT', summary: 'Zorganizowany przez The Prototype bunt wszystkich eksperymentów Bigger Bodies, zakończony masakrą personelu oraz zamknięciem fabryki przed światem zewnętrznym.', related: 'Experiment 1006, 1170, 1188, 1222, wszyscy pracownicy.', source: 'Kanoniczne nagranie VHS z Chapter 3.' },
+    { id: 'IR-002', title: 'Incydent w Game Station', date: 'Wydarzenia Chapter 2', sector: 'Game Station', severity: 'HIGH', status: 'CANON EVENT', summary: 'Przejęcie kontroli nad testami przez Mommy Long Legs (1222), śmierć Bunzo Bunny oraz zniszczenie obiektu 1222 w maszynie przemysłowej.', related: 'Experiment 1222, Bunzo Bunny, PJ Pug-a-Pillar, The Prototype.', source: 'Chapter 2: Fly in a Web.' },
+    { id: 'IR-003', title: 'Kryzys w Playcare i eliminacja 1188', date: 'Wydarzenia Chapter 3', sector: 'Playcare', severity: 'CRITICAL', status: 'CANON EVENT', summary: 'Konfrontacja w sektorze Playcare zdominowanym przez kult The Prototype i Czerwony Dym. Śmierć DogDaya oraz CatNapa.', related: 'Experiment 1188, DogDay, The Prototype, Poppy.', source: 'Chapter 3: Deep Sleep.' },
+    { id: 'IR-004', title: 'Ucieczka Yarnaby i upadek Safe Haven', date: 'Wydarzenia Chapter 4', sector: 'The Shelf / Safe Haven', severity: 'CRITICAL', status: 'CANON EVENT', summary: 'Wypuszczenie obiektu 1166 przez The Doctora, śmierć Yarnaby w No Man’s Land, zniszczenie schronienia Safe Haven (Experiment 1322) oraz neutralizacja Harley’a Sawyera.', related: 'Experiment 1166, Experiment 1322 (Doey), Harley Sawyer.', source: 'Chapter 4: Safe Haven.' },
+    { id: 'IR-005', title: 'Incydent w Laboratoriach Integracji (Experiment 1468)', date: 'Wydarzenia Chapter 5', sector: 'Integration Department / Laboratories', severity: 'CRITICAL', status: 'CANON EVENT', summary: 'Wydarzenia w głębokich laboratoriach fabryki powiązane z Gracie Green (Experiment 1468 — Lily Lovebraids) oraz działaniami The Prototype.', related: 'Gracie Green, Experiment 1468, Poppy, Kissy Missy, The Prototype.', source: 'Chapter 5: Broken Things.' },
+    { id: 'IR-006', title: 'Wczesne porażki reaktywacji neuronalnej (1015, 1026)', date: 'Data niezweryfikowana', sector: 'Special Projects', severity: 'HIGH', status: 'ARG DOCUMENTATION', summary: 'Nieudane próby poprzedzające sukces Experiment 1160 (Boxy Boo) w ramach badań prowadzonych przez Harley’a Sawyera.', related: 'Experiments 1015, 1026, 1160, Harley Sawyer.', source: 'Materiały ARG Chapter 4.' }
+  ];
+
+  var archives = [
+    { id: 'ARC-001', title: 'Bigger Bodies Initiative — Przegląd Programu', level: 'LEVEL 4', status: 'CANON SUMMARY', text: 'Tajny program Playtime Co. mający na celu zastąpienie personelu oraz stworzenie żywych maskotek poprzez przenoszenie ludzkich organów i układów nerwowych do gigantycznych ciał zabawek.' },
+    { id: 'ARC-002', title: 'Experiment 1006 — Akta Ściśle Tajne', level: 'LEVEL 5', status: 'RESTRICTED', text: 'The Prototype wykazuje niespotykaną inteligencję oraz zdolność adaptacji. Każda próba pełnego zrozumienia jego konstrukcji zakończyła się niepowodzeniem lub śmiercią personelu.' },
+    { id: 'ARC-003', title: 'Prisoner Profile 1166 (Quinn Navidson)', level: 'LEVEL 4', status: 'CANON DOCUMENT', text: 'Dokumentacja potwierdza, że Harley Sawyer odizolował Quinna Navidsona od reszty dzieci, aby stworzyć bezgranicznie lojalnego strażnika — Yarnaby.' },
+    { id: 'ARC-004', title: 'Akta Działu Integracji — Gracie Green / 1468', level: 'LEVEL 5', status: 'CANON DOCUMENT', text: 'Dokumentacja kanoniczna potwierdzająca rolę Gracie Green (Ms. Gracie) jako doradczyni ds. wellness i integracji oraz jej powiązanie z Experiment 1468 (Lily Lovebraids).' },
+    { id: 'ARC-005', title: 'Eksperymenty 1015 i 1026 — Raport Niepowodzeń', level: 'LEVEL 4', status: 'ARG REFERENCE', text: 'Wczesne eksperymenty neuronalne zakończone fiaskiem przed przełomem osiągniętym przy obiekcie 1160 (Boxy Boo).' },
+    { id: 'ARC-006', title: 'Metodologia Weryfikacji Lore w Tej Bazie', level: 'LEVEL 1', status: 'SYSTEM NOTE', text: 'Potwierdzone numery kanoniczne (1006, 1160, 1163, 1166, 1170, 1188, 1199, 1222, 1322, 1468) pochodzą z oficjalnych materiałów gry i ARG. Postacie bez potwierdzonego numeru oznaczono jako NUMER NIEPOTWIERDZONY.' }
+  ];
+
+  var clearances = [
+    { level: 'LEVEL 1', name: 'Basic / Visitor', desc: 'Dostęp do podstawowego katalogu obiektów oraz ogólnych informacji o fabryce.' },
+    { level: 'LEVEL 2', name: 'General Staff', desc: 'Dostęp do wybranych kart pracowniczych oraz dokumentacji operacyjnej sektorów.' },
+    { level: 'LEVEL 3', name: 'Supervisor / Research', desc: 'Dostęp do raportów z testów Game Station oraz akt personelu badawczego.' },
+    { level: 'LEVEL 4', name: 'Management / Bigger Bodies', desc: 'Dostęp do większości akt eksperymentów Bigger Bodies Initiative oraz raportów incydentów.' },
+    { level: 'LEVEL 5', name: 'Executive / Special Projects', desc: 'Najwyższy poziom autoryzacji w symulacji (Elliot Ludwig, Harley Sawyer, Experiment 1006, Experiment 1468).' }
+  ];
+
+  function el(id) {
+    return document.getElementById(id);
+  }
+
+  function esc(s) {
+    if (s === null || s === undefined) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function tag(text, kind) {
+    return '<span class="tag ' + (kind || '') + '">' + esc(text) + '</span>';
+  }
+
+  function pageHead(title, desc) {
+    return '<div class="pageHead"><h1>' + esc(title) + '</h1><p>' + esc(desc) + '</p></div>';
+  }
+
+  function recordCard(r, type, index) {
+    var title = r.name || r.title;
+    var id = r.id || '';
+    var meta = '';
+    if (type === 'employee') {
+      meta = '<b>' + esc(r.role) + '</b><br>ID: ' + esc(r.id) + '<br>Sektor: ' + esc(r.sector);
+    } else if (type === 'experiment') {
+      meta = '<b>Eksperyment: ' + esc(r.number) + '</b><br>Sektor: ' + esc(r.sector) + '<br>Status: ' + esc(r.status);
+    } else if (type === 'object') {
+      meta = '<b>' + esc(r.type) + '</b><br>Sektor: ' + esc(r.sector) + '<br>Status: ' + esc(r.status);
+    } else if (type === 'incident') {
+      meta = '<b>' + esc(r.date) + '</b><br>Sektor: ' + esc(r.sector) + '<br>Zagrożenie: ' + esc(r.severity);
+    } else if (type === 'archive') {
+      meta = '<b>Wymagany dostęp: ' + esc(r.level) + '</b><br>Klasyfikacja: ' + esc(r.status);
+    }
+
+    var badgeText = r.status || r.canon || '';
+    var isWarn = (badgeText.indexOf('CRITICAL') >= 0 || badgeText.indexOf('RESTRICTED') >= 0 || (r.number && r.number.indexOf('NIEPOTWIERDZON') >= 0));
+    var extraClass = '';
+    if ((index + 1) % 3 === 0) extraClass += ' third';
+    if ((index + 1) % 2 === 0) extraClass += ' even';
+
+    return '<div class="record' + extraClass + '" data-record="' + esc(id) + '" data-type="' + esc(type) + '">' +
+      '<h3>' + esc(title) + '</h3>' +
+      '<div class="meta">' + meta + '</div>' +
+      tag(badgeText, isWarn ? 'red' : 'green') +
+      '</div>';
+  }
+
+  function renderDashboard() {
+    var out = pageHead('DASHBOARD — CENTRAL TERMINAL', 'SYSTEM ARCHIWUM PRACOWNIKÓW I EKSPERYMENTÓW PLAYTIME CO.');
+    out += '<div class="stats">' +
+      '<div class="stat"><strong>' + employees.length + '</strong><span>AKTA PRACOWNIKÓW</span></div>' +
+      '<div class="stat evenStat"><strong>' + experiments.length + '</strong><span>REKORDY EKSPERYMENTÓW</span></div>' +
+      '<div class="stat"><strong>' + objects.length + '</strong><span>SKATALOGOWANE OBIEKTY</span></div>' +
+      '<div class="stat evenStat lastStat"><strong>' + incidents.length + '</strong><span>RAPORTY INCYDENTÓW</span></div>' +
+      '</div>';
+
+    out += '<div class="twoCol" style="margin-top:12px;">' +
+      '<div class="panel"><h2>⚠ OSTRZEŻENIA SYSTEMOWE</h2>' +
+      '<div class="line"><b>WERYFIKACJA DANYCH LORE</b><br>Wszystkie niepotwierdzone numery eksperymentów oznaczono jako NUMER NIEPOTWIERDZONY.</div>' +
+      '<div class="line"><b>AKTUALIZACJA DANYCH KANONICZNYCH</b><br>Uwzględniono oficjalne wpisy dla Gracie Green (EMP-0004 / Experiment 1468) oraz Doey the Doughman (1322).</div>' +
+      '<div class="line"><b>TRYB KOMPATYBILNOŚCI iOS 9.3.6</b><br>Terminale działają lokalnie w czystym ES5 bez zewnętrznych bibliotek.</div>' +
+      '</div>' +
+      '<div class="panel secondCol"><h2>OSTATNIA AKTYWNOŚĆ ARCHIWUM</h2>' +
+      '<div class="line"><b>EXP-1468 (LILY LOVEBRAIDS)</b> — Powiązano akta kanoniczne Gracie Green (Chapter 5).</div>' +
+      '<div class="line"><b>EXP-1322 (DOEY THE DOUGHMAN)</b> — Zaktualizowano dane z sektora Safe Haven (Chapter 4).</div>' +
+      '<div class="line"><b>EXP-1006 (THE PROTOTYPE)</b> — Status krytyczny; brak pełnych danych konstrukcyjnych.</div>' +
+      '</div></div>';
+
+    out += '<div class="panel"><h2>STRUKTURA KATALOGÓW PORTALU</h2>' +
+      '<div class="line"><b>02. EMPLOYEE FILES</b> — Karty pracowników, stanowiska, poziomy dostępu, historia i uwagi przełożonych.</div>' +
+      '<div class="line"><b>03. EXPERIMENTS</b> — Baza eksperymentów Bigger Bodies Initiative oraz pozostałych postaci z uniwersum.</div>' +
+      '<div class="line"><b>04. OBJECTS</b> — GrabPack, Poppy Doll, Red Smoke, terminale oraz dokumentacja fabryki.</div>' +
+      '<div class="line"><b>05. INCIDENT REPORTS</b> — The Hour of Joy oraz kluczowe incydenty z rozdziałów 1–5.</div>' +
+      '<div class="line"><b>06. RESTRICTED ARCHIVES</b> — Tajne notatki badawcze i metodologia weryfikacji danych.</div>' +
+      '</div>';
+    return out;
+  }
+
+  function renderList(title, desc, records, type) {
+    var out = pageHead(title, desc);
+    out += '<div class="toolbar">' +
+      '<input type="text" id="searchBox" placeholder="Szukaj po nazwie, numerze, sektorze lub statusie...">' +
+      '<div class="toolbarNote">Kliknij wybraną kartę, aby otworzyć pełne akta.</div>' +
+      '</div>';
+    out += '<div id="recordGrid" class="grid">';
+    for (var i = 0; i < records.length; i++) {
+      out += recordCard(records[i], type, i);
+    }
+    out += '</div><div id="emptyState" class="empty hidden">BRAK REKORDÓW SPEŁNIAJĄCYCH KRYTERIA WYSZUKIWANIA</div>';
+    return out;
+  }
+
+  function detailCell(label, value) {
+    return '<div class="detailCell"><b>' + esc(label) + '</b>' + esc(value || 'Brak danych') + '</div>';
+  }
+
+  function detailText(label, value) {
+    return '<div class="detailText"><b>' + esc(label) + '</b>' + esc(value || 'Brak danych') + '</div>';
+  }
+
+  function renderEmployee(r) {
+    return '<button class="backBtn" data-back="Employee Files" type="button">← POWRÓT DO AKT PRACOWNIKÓW</button>' +
+      '<div class="detail">' +
+      '<h2>' + esc(r.name) + '</h2>' +
+      '<div class="sub">NUMER PRACOWNIKA: ' + esc(r.id) + ' &bull; ' + esc(r.status) + '</div>' +
+      tag(r.access, 'red') + tag(r.status, 'green') +
+      '<div class="detailGrid">' +
+      detailCell('STANOWISKO', r.role) +
+      detailCell('POZIOM DOSTĘPU', r.access) +
+      detailCell('SEKTOR FABRYKI', r.sector) +
+      detailCell('STATUS KANONICZNOŚCI', r.status) +
+      '</div>' +
+      detailText('WERYFIKACJA LORE / NOTATKA ARCHIWUM', r.canon) +
+      detailText('HISTORIA ZATRUDNIENIA', r.history) +
+      detailText('PRZYPISANE EKSPERYMENTY', r.experiments) +
+      detailText('PRZYPISANE OBIEKTY', r.objects) +
+      detailText('RAPORTY I UWAGI PRZEŁOŻONYCH', r.reports) +
+      '</div>';
+  }
+
+  function renderExperiment(r) {
+    var isUnconf = r.number.indexOf('NIEPOTWIERDZON') >= 0;
+    return '<button class="backBtn" data-back="Experiments" type="button">← POWRÓT DO BAZY EKSPERYMENTÓW</button>' +
+      '<div class="detail">' +
+      '<h2>' + esc(r.name) + '</h2>' +
+      '<div class="sub">NUMER EKSPERYMENTU: ' + esc(r.number) + ' &bull; ' + esc(r.canon) + '</div>' +
+      tag('ZAGROŻENIE: ' + r.danger, 'red') +
+      tag('DOSTĘP: ' + r.access) +
+      tag(r.status, isUnconf ? 'red' : 'grey') +
+      '<div class="detailGrid">' +
+      detailCell('NUMER EKSPERYMENTU', r.number) +
+      detailCell('SEKTOR', r.sector) +
+      detailCell('STATUS', r.status) +
+      detailCell('POZIOM ZAGROŻENIA', r.danger) +
+      detailCell('POZIOM DOSTĘPU', r.access) +
+      detailCell('WERYFIKACJA NUMERU / LORE', r.canon) +
+      '</div>' +
+      detailText('HISTORIA POWSTANIA', r.history) +
+      detailText('CEL EKSPERYMENTU', r.goal) +
+      detailText('POWIĄZANI PRACOWNICY', r.workers) +
+      detailText('POWIĄZANE OBIEKTY', r.objects) +
+      detailText('RAPORTY I INCYDENTY', r.reports) +
+      '</div>';
+  }
+
+  function renderObject(r) {
+    return '<button class="backBtn" data-back="Objects" type="button">← POWRÓT DO OBIEKTÓW</button>' +
+      '<div class="detail">' +
+      '<h2>' + esc(r.name) + '</h2>' +
+      '<div class="sub">ID OBIEKTU: ' + esc(r.id) + ' &bull; ' + esc(r.status) + '</div>' +
+      tag(r.type) + tag(r.status, 'red') +
+      '<div class="detailGrid">' +
+      detailCell('IDENTYFIKATOR', r.id) +
+      detailCell('TYP OBIEKTU', r.type) +
+      detailCell('SEKTOR', r.sector) +
+      detailCell('STATUS', r.status) +
+      '</div>' +
+      detailText('OPIS I UWAGI ARCHIWALNE', r.notes) +
+      '</div>';
+  }
+
+  function renderIncident(r) {
+    return '<button class="backBtn" data-back="Incident Reports" type="button">← POWRÓT DO RAPORTÓW INCYDENTÓW</button>' +
+      '<div class="detail">' +
+      '<h2>' + esc(r.title) + '</h2>' +
+      '<div class="sub">RAPORT: ' + esc(r.id) + ' &bull; ' + esc(r.status) + '</div>' +
+      tag('POZIOM: ' + r.severity, 'red') + tag(r.status) +
+      '<div class="detailGrid">' +
+      detailCell('NUMER RAPORTU', r.id) +
+      detailCell('DATA / OKRES', r.date) +
+      detailCell('SEKTOR', r.sector) +
+      detailCell('POWAGA INCYDENTU', r.severity) +
+      '</div>' +
+      detailText('PRZEBIEG I PODSUMOWANIE INCYDENTU', r.summary) +
+      detailText('POWIĄZANE OBIEKTY I PERSONEL', r.related) +
+      detailText('ŹRÓDŁO INFORMACJI', r.source) +
+      '</div>';
+  }
+
+  function renderArchive(r) {
+    return '<button class="backBtn" data-back="Restricted Archives" type="button">← POWRÓT DO TAJNYCH ARCHIWÓW</button>' +
+      '<div class="detail">' +
+      '<h2>' + esc(r.title) + '</h2>' +
+      '<div class="sub">DOKUMENT: ' + esc(r.id) + ' &bull; ' + esc(r.status) + '</div>' +
+      tag(r.level, 'red') + tag(r.status) +
+      '<div class="detailGrid">' +
+      detailCell('IDENTYFIKATOR', r.id) +
+      detailCell('WYMAGANY POZIOM DOSTĘPU', r.level) +
+      detailCell('KLASYFIKACJA', r.status) +
+      detailCell('STATUS ARCHIWUM', 'DOSTĘP LOKALNY') +
+      '</div>' +
+      detailText('TREŚĆ DOKUMENTU', r.text) +
+      '</div>';
+  }
+
+  function renderPage(page) {
+    currentPage = page;
+    var out = '';
+    if (page === 'Dashboard') {
+      out = renderDashboard();
+    } else if (page === 'Employee Files') {
+      out = renderList('EMPLOYEE FILES — KARTOTEKA PERSONELU', 'BAZA PRACOWNIKÓW PLAYTIME CO. (POSTACIE KANONICZNE)', employees, 'employee');
+    } else if (page === 'Experiments') {
+      out = renderList('EXPERIMENTS — BAZA EKSPERYMENTÓW', 'BIGGER BODIES INITIATIVE ORAZ INNE POSTACIE POPPY PLAYTIME — NIEPOTWIERDZONE NUMERY ZOSTAŁY OZNACZONE', experiments, 'experiment');
+    } else if (page === 'Objects') {
+      out = renderList('OBJECTS — KATALOG OBIEKTÓW I SPRZĘTU', 'ZABAWKI, WYPOSAŻENIE PRACOWNICZE, SUBSTANCJE ORAZ DOKUMENTACJA FABRYKI', objects, 'object');
+    } else if (page === 'Incident Reports') {
+      out = renderList('INCIDENT REPORTS — RAPORTY INCYDENTÓW', 'KRYTYCZNE ZDARZENIA W HISTORII PLAYTIME CO. ORAZ WPISY ARCHIWALNE', incidents, 'incident');
+    } else if (page === 'Restricted Archives') {
+      out = renderList('RESTRICTED ARCHIVES — TAJNE ARCHIWA', 'DOKUMENTY O OGRANICZONYM DOSTĘPIE ORAZ NOTATKI METODOLOGICZNE', archives, 'archive');
+    } else if (page === 'Security Clearance') {
+      out = pageHead('SECURITY CLEARANCE — POZIOMY DOSTĘPU', 'MATRYCA UPRAWNIEŃ PERSONELU PLAYTIME CO.');
+      out += '<div class="panel"><h2>POZIOMY AUTORYZACJI (LEVEL 1 – LEVEL 5)</h2>';
+      for (var c = 0; c < clearances.length; c++) {
+        out += '<div class="line">' + tag(clearances[c].level, 'red') + ' <b>' + esc(clearances[c].name) + '</b><br>' + esc(clearances[c].desc) + '</div>';
+      }
+      out += '</div>';
+      out += '<div class="panel"><h2>INFORMACJA O BEZPIECZEŃSTWIE SYMULACJI</h2>' +
+        '<div class="line">Ekran logowania akceptuje dowolne niepuste znaki (symulacja starego terminala Playtime Co.).</div>' +
+        '<div class="line">Żadne dane nie są wysyłane na zewnętrzny serwer — cały system działa lokalnie w pliku HTML.</div>' +
+        '</div>';
+    }
+
+    el('content').innerHTML = out;
+
+    var buttons = document.getElementsByClassName('navBtn');
+    for (var b = 0; b < buttons.length; b++) {
+      if (buttons[b].getAttribute('data-page') === page) {
+        buttons[b].className = 'navBtn active';
+      } else {
+        buttons[b].className = 'navBtn';
+      }
+    }
+    attachPageEvents();
+    window.scrollTo(0, 0);
+  }
+
+  function showDetail(r, type) {
+    var out = '';
+    if (type === 'employee') out = renderEmployee(r);
+    else if (type === 'experiment') out = renderExperiment(r);
+    else if (type === 'object') out = renderObject(r);
+    else if (type === 'incident') out = renderIncident(r);
+    else out = renderArchive(r);
+
+    el('content').innerHTML = out;
+    attachPageEvents();
+    window.scrollTo(0, 0);
+  }
+
+  function filterRecords(q) {
+    var grid = el('recordGrid');
+    if (!grid) return;
+    var cards = grid.getElementsByClassName('record');
+    var count = 0;
+    var query = q.toLowerCase();
+    for (var i = 0; i < cards.length; i++) {
+      var text = cards[i].innerText || cards[i].textContent || '';
+      if (text.toLowerCase().indexOf(query) >= 0) {
+        cards[i].style.display = 'inline-block';
+        count++;
+      } else {
+        cards[i].style.display = 'none';
+      }
+    }
+    var empty = el('emptyState');
+    if (empty) {
+      empty.className = count > 0 ? 'empty hidden' : 'empty';
+    }
+  }
+
+  function attachPageEvents() {
+    var grid = el('recordGrid');
+    if (grid) {
+      grid.onclick = function(e) {
+        e = e || window.event;
+        var target = e.target || e.srcElement;
+        while (target && target !== grid && (!target.getAttribute || !target.getAttribute('data-record'))) {
+          target = target.parentNode;
+        }
+        if (!target || target === grid) return;
+        var id = target.getAttribute('data-record');
+        var type = target.getAttribute('data-type');
+        var list = archives;
+        if (type === 'employee') list = employees;
+        else if (type === 'experiment') list = experiments;
+        else if (type === 'object') list = objects;
+        else if (type === 'incident') list = incidents;
+
+        for (var j = 0; j < list.length; j++) {
+          if (list[j].id === id) {
+            showDetail(list[j], type);
+            break;
+          }
+        }
+      };
+    }
+
+    var back = document.getElementsByClassName('backBtn');
+    for (var k = 0; k < back.length; k++) {
+      back[k].onclick = function() {
+        renderPage(this.getAttribute('data-back'));
+      };
+    }
+
+    var search = el('searchBox');
+    if (search) {
+      search.onkeyup = function() {
+        filterRecords(this.value);
+      };
+      search.onchange = function() {
+        filterRecords(this.value);
+      };
+    }
+  }
+
+  function performLogin() {
+    var idVal = el('employeeId').value;
+    var passVal = el('password').value;
+    if (!idVal || idVal.replace(/\s/g, '').length === 0 || !passVal || passVal.length === 0) {
+      el('loginError').innerHTML = 'ACCESS DENIED: Wprowadź dowolne znaki w obu polach.';
+      return false;
+    }
+    el('loginError').innerHTML = '';
+    el('sessionUser').innerHTML = esc(idVal);
+
+    el('loginScreen').style.display = 'none';
+    el('portal').style.display = 'block';
+    renderPage('Dashboard');
+    return false;
+  }
+
+  function init() {
+    var nav = document.getElementsByClassName('navBtn');
+    for (var i = 0; i < nav.length; i++) {
+      nav[i].onclick = function() {
+        renderPage(this.getAttribute('data-page'));
+      };
+    }
+
+    el('loginForm').onsubmit = function(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      return performLogin();
+    };
+
+    el('logoutBtn').onclick = function() {
+      el('portal').style.display = 'none';
+      el('loginScreen').style.display = 'block';
+      el('password').value = '';
+    };
+  }
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    init();
+  } else {
+    window.onload = init;
+  }
+})();
+</script>
+</body>
+</html>
